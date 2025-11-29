@@ -3,7 +3,7 @@ package com.helaketha.agri_new.agri.entity;
 public class Farmer {
 
     private Integer farmerId;
-    private String Name;
+    private String fullName;
     private String phone;
     private String email;
     private String address;
@@ -11,33 +11,60 @@ public class Farmer {
 
     public Farmer() { }
 
-    public Farmer(Integer farmerId, String Name, String phone, String email, String address, String nic) {
+    public Farmer(Integer farmerId, String fullName, String phone, String email, String address, String nic) {
         this.farmerId = farmerId;
-        this.Name = Name;
+        this.fullName = fullName;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.nic = nic;
     }
 
-    public Integer getFarmerId() { return farmerId; }
-    public void setFarmerId(Integer farmerId) { this.farmerId = farmerId; }
+    public Integer getFarmerId() {
+        return farmerId;
+    }
 
-    public String getFullName() { return Name; }
-    public void Name(String Name) { this.Name = Name; }
+    public void setFarmerId(Integer farmerId) {
+        this.farmerId = farmerId;
+    }
 
-    public String getPhone() { return phone; }
-    public void setPhone(String phone) { this.phone = phone; }
+    public String getFullName() {
+        return fullName;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
+    public String getPhone() {
+        return phone;
+    }
 
-    public String getNic() { return nic; }
-    public void setNic(String nic) { this.nic = nic; }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-    public void Name(String name) {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getNic() {
+        return nic;
+    }
+
+    public void setNic(String nic) {
+        this.nic = nic;
     }
 }

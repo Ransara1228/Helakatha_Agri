@@ -1,8 +1,12 @@
 package com.helaketha.agri_new.agri.controller;
 
+import com.helaketha.agri_new.agri.dto.ServiceBookingRequest;
+import com.helaketha.agri_new.agri.dto.ServiceStatusUpdateRequest;
 import com.helaketha.agri_new.agri.entity.ServiceBooking;
 import com.helaketha.agri_new.agri.service.ServiceBookingService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -11,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/services")
 @CrossOrigin
+@Validated
 public class ServiceController {
 
     private final ServiceBookingService service;
@@ -20,8 +25,8 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<ServiceBooking> create(@RequestBody ServiceBooking sb) {
-        ServiceBooking created = service.save(sb);
+    public ResponseEntity<ServiceBooking> create(@Valid @RequestBody ServiceBookingRequest request) {
+        ServiceBooking created = service.save(request.toEntity());
         return ResponseEntity.status(201).body(created);
     }
 
@@ -58,14 +63,16 @@ public class ServiceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServiceBooking> update(@PathVariable Integer id, @RequestBody ServiceBooking sb) {
-        ServiceBooking updated = service.update(id, sb);
+    public ResponseEntity<ServiceBooking> update(@PathVariable Integer id,
+                                                 @Valid @RequestBody ServiceBookingRequest request) {
+        ServiceBooking updated = service.update(id, request.asEntityWithId(id));
         return ResponseEntity.ok(updated);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<ServiceBooking> patchStatus(@PathVariable Integer id, @RequestParam String status) {
-        ServiceBooking updated = service.updateStatus(id, status);
+    public ResponseEntity<ServiceBooking> patchStatus(@PathVariable Integer id,
+                                                      @Valid @RequestBody ServiceStatusUpdateRequest request) {
+        ServiceBooking updated = service.updateStatus(id, request.getStatus());
         return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
     }
 
