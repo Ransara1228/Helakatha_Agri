@@ -24,7 +24,7 @@ public class FarmerDaoImpl implements FarmerDao {
     private static final RowMapper<Farmer> MAPPER = (rs, rowNum) -> {
         Farmer f = new Farmer();
         f.setFarmerId(rs.getInt("farmer_id"));
-        f.Name(rs.getString("name"));
+        f.setFullName(rs.getString("name"));
         f.setPhone(rs.getString("phone"));
         f.setEmail(rs.getString("email"));
         f.setAddress(rs.getString("address"));
@@ -38,7 +38,7 @@ public class FarmerDaoImpl implements FarmerDao {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, farmer.Name());
+            ps.setString(1, farmer.getFullName());
             ps.setString(2, farmer.getPhone());
             ps.setString(3, farmer.getEmail());
             ps.setString(4, farmer.getAddress());
@@ -65,7 +65,7 @@ public class FarmerDaoImpl implements FarmerDao {
     public int update(Farmer farmer) {
         String sql = "UPDATE farmer SET full_name=?, phone=?, email=?, address=?, nic=? WHERE farmer_id=?";
         return jdbcTemplate.update(sql,
-                farmer.Name(),
+                farmer.getFullName(),
                 farmer.getPhone(),
                 farmer.getEmail(),
                 farmer.getAddress(),

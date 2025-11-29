@@ -1,8 +1,12 @@
 package com.helaketha.agri_new.agri.controller;
 
+import com.helaketha.agri_new.agri.dto.FarmerPatchRequest;
+import com.helaketha.agri_new.agri.dto.FarmerRequest;
 import com.helaketha.agri_new.agri.entity.Farmer;
 import com.helaketha.agri_new.agri.service.FarmerService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/farmers")
 @CrossOrigin
+@Validated
 public class FarmerController {
 
     private final FarmerService service;
@@ -19,8 +24,8 @@ public class FarmerController {
     }
 
     @PostMapping
-    public ResponseEntity<Farmer> addFarmer(@RequestBody Farmer farmer) {
-        Farmer created = service.create(farmer);
+    public ResponseEntity<Farmer> addFarmer(@Valid @RequestBody FarmerRequest request) {
+        Farmer created = service.create(request.toEntity());
         return ResponseEntity.status(201).body(created);
     }
 
@@ -37,8 +42,8 @@ public class FarmerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Farmer> updateFarmer(@PathVariable int id, @RequestBody Farmer farmer) {
-        Farmer updated = service.update(id, farmer);
+    public ResponseEntity<Farmer> updateFarmer(@PathVariable int id, @Valid @RequestBody FarmerRequest request) {
+        Farmer updated = service.update(id, request.toEntity());
         return ResponseEntity.ok(updated);
     }
 
@@ -49,13 +54,9 @@ public class FarmerController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Farmer> patchFarmer(@PathVariable int id, @RequestBody Farmer partial) {
+    public ResponseEntity<Farmer> patchFarmer(@PathVariable int id, @Valid @RequestBody FarmerPatchRequest patch) {
         return service.findById(id).map(existing -> {
-            if (partial.getFullName() != null) existing.setFullName(partial.getFullName());
-            if (partial.getPhone() != null) existing.setPhone(partial.getPhone());
-            if (partial.getEmail() != null) existing.setEmail(partial.getEmail());
-            if (partial.getAddress() != null) existing.setAddress(partial.getAddress());
-            if (partial.getNic() != null) existing.setNic(partial.getNic());
+            patch.applyTo(existing);
             service.update(id, existing);
             return ResponseEntity.ok(existing);
         }).orElse(ResponseEntity.notFound().build());
