@@ -1,1 +1,11 @@
-spring.application.name=helaketha_agri_new
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/helaketha_agri
+    username: dbuser
+    password: password
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true

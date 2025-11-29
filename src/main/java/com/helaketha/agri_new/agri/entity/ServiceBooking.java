@@ -2,66 +2,43 @@ package com.helaketha.agri_new.agri.entity;
 
 import java.time.LocalDate;
 
-public class Service {
+public class ServiceBooking {
 
-    private Integer id;
+
+    private Integer bookingId;
     private Integer farmerId;
-    private String serviceType;
-    private LocalDate date;
-    private String status;
+    private Integer serviceId;      // references a service catalog (optional)
+    private String serviceType;     // e.g. "TRACTOR", "HARVEST"
+    private LocalDate bookingDate;
+    private String status;          // PENDING, CONFIRMED, COMPLETED, CANCELLED
 
-    public Service() {
-    }
+    public ServiceBooking() { }
 
-    public Service(Integer id, Integer farmerId, String serviceType, LocalDate date, String status) {
-        this.id = id;
+    public ServiceBooking(Integer bookingId, Integer farmerId, Integer serviceId, String serviceType,
+                          LocalDate bookingDate, String status) {
+        this.bookingId = bookingId;
         this.farmerId = farmerId;
+        this.serviceId = serviceId;
         this.serviceType = serviceType;
-        this.date = date;
-        this.status = status;
-
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getFarmerId() {
-        return farmerId;
-    }
-
-    public void setFarmerId(Integer farmerId) {
-        this.farmerId = farmerId;
-    }
-
-    public String getServiceType() {
-        return serviceType;
-    }
-
-    public void setServiceType(String serviceType) {
-        this.serviceType = serviceType;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
+        this.bookingDate = bookingDate;
         this.status = status;
     }
 
-    public void setBookingId(Integer id) {
-    }
+    public Integer getBookingId() { return bookingId; }
+    public void setBookingId(Integer bookingId) { this.bookingId = bookingId; }
+
+    public Integer getFarmerId() { return farmerId; }
+    public void setFarmerId(Integer farmerId) { this.farmerId = farmerId; }
+
+    public Integer getServiceId() { return serviceId; }
+    public void setServiceId(Integer serviceId) { this.serviceId = serviceId; }
+
+    public String getServiceType() { return serviceType; }
+    public void setServiceType(String serviceType) { this.serviceType = serviceType; }
+
+    public LocalDate getBookingDate() { return bookingDate; }
+    public void setBookingDate(LocalDate bookingDate) { this.bookingDate = bookingDate; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

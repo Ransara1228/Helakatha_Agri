@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class HelakethaAgriNewApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(HelakethaAgriNewApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(HelakethaAgriNewApplication.class, args);
+    }
 
 }
