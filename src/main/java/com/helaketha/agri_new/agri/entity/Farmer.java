@@ -1,4 +1,43 @@
 package com.helaketha.agri_new.agri.entity;
 
 public class Farmer {
+
+    private Integer farmerId;
+    private String Name;
+    private String phone;
+    private String email;
+    private String address;
+    private String nic;
+
+    public Farmer() { }
+
+    public Farmer(Integer farmerId, String Name, String phone, String email, String address, String nic) {
+        this.farmerId = farmerId;
+        this.Name = Name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.nic = nic;
+    }
+
+    public Integer getFarmerId() { return farmerId; }
+    public void setFarmerId(Integer farmerId) { this.farmerId = farmerId; }
+
+    public String getFullName() { return Name; }
+    public void Name(String Name) { this.Name = Name; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+
+    public String getNic() { return nic; }
+    public void setNic(String nic) { this.nic = nic; }
+
+    public void Name(String name) {
+    }
 }

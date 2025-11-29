@@ -1,68 +1,63 @@
 package com.helaketha.agri_new.agri.controller;
 
-import com.helaketha.agri_new.agri.dao.FarmerDao;
 import com.helaketha.agri_new.agri.entity.Farmer;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import com.helaketha.agri_new.agri.service.FarmerService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
-@Repository
-public class FarmerDaoImpl implements FarmerDao {
+@RestController
+@RequestMapping("/api/farmers")
+@CrossOrigin
+public class FarmerController {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final FarmerService service;
 
-    public FarmerDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public FarmerController(FarmerService service) {
+        this.service = service;
     }
 
-    private static final RowMapper<Farmer> FARMER_ROW_MAPPER = (rs, rowNum) ->
-            new Farmer(
-                    rs.getInt("farmer_id"),
-                    rs.getString("name"),
-                    rs.getString("phone"),
-                    rs.getString("address"),
-                    rs.getString("nic")
-            );
-
-    @Override
-    public int insert(Farmer farmer) {
-        String sql = "INSERT INTO farmers (name, phone, address, nic) VALUES (?, ?, ?, ?)";
-        return jdbcTemplate.update(sql,
-                farmer.getName(),
-                farmer.getPhone(),
-                farmer.getAddress(),
-                farmer.getNic());
+    @PostMapping
+    public ResponseEntity<Farmer> addFarmer(@RequestBody Farmer farmer) {
+        Farmer created = service.create(farmer);
+        return ResponseEntity.status(201).body(created);
     }
 
-    @Override
-    public List<Farmer> findAll() {
-        String sql = "SELECT * FROM farmers";
-        return jdbcTemplate.query(sql, FARMER_ROW_MAPPER);
+    @GetMapping
+    public List<Farmer> getFarmers() {
+        return service.findAll();
     }
 
-    @Override
-    public Optional<Farmer> findById(int id) {
-        String sql = "SELECT * FROM farmers WHERE farmer_id = ?";
-        return jdbcTemplate.query(sql, FARMER_ROW_MAPPER, id).stream().findFirst();
+    @GetMapping("/{id}")
+    public ResponseEntity<Farmer> getFarmerById(@PathVariable int id) {
+        return service.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @Override
-    public int update(Farmer farmer) {
-        String sql = "UPDATE farmers SET name = ?, phone = ?, address = ?, nic = ? WHERE farmer_id = ?";
-        return jdbcTemplate.update(sql,
-                farmer.getName(),
-                farmer.getPhone(),
-                farmer.getAddress(),
-                farmer.getNic(),
-                farmer.getFarmerId());
+    @PutMapping("/{id}")
+    public ResponseEntity<Farmer> updateFarmer(@PathVariable int id, @RequestBody Farmer farmer) {
+        Farmer updated = service.update(id, farmer);
+        return ResponseEntity.ok(updated);
     }
 
-    @Override
-    public int delete(int id) {
-        String sql = "DELETE FROM farmers WHERE farmer_id = ?";
-        return jdbcTemplate.update(sql, id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteFarmer(@PathVariable int id) {
+        boolean deleted = service.delete(id);
+        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Farmer> patchFarmer(@PathVariable int id, @RequestBody Farmer partial) {
+        return service.findById(id).map(existing -> {
+            if (partial.getFullName() != null) existing.setFullName(partial.getFullName());
+            if (partial.getPhone() != null) existing.setPhone(partial.getPhone());
+            if (partial.getEmail() != null) existing.setEmail(partial.getEmail());
+            if (partial.getAddress() != null) existing.setAddress(partial.getAddress());
+            if (partial.getNic() != null) existing.setNic(partial.getNic());
+            service.update(id, existing);
+            return ResponseEntity.ok(existing);
+        }).orElse(ResponseEntity.notFound().build());
     }
 }

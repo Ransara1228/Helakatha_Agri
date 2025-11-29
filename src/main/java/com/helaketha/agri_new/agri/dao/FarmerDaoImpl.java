@@ -1,4 +1,81 @@
 package com.helaketha.agri_new.agri.dao;
 
-public class FarmerDaoImpl {
+import com.helaketha.agri_new.agri.entity.Farmer;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public class FarmerDaoImpl implements FarmerDao {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public FarmerDaoImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    private static final RowMapper<Farmer> MAPPER = (rs, rowNum) -> {
+        Farmer f = new Farmer();
+        f.setFarmerId(rs.getInt("farmer_id"));
+        f.Name(rs.getString("name"));
+        f.setPhone(rs.getString("phone"));
+        f.setEmail(rs.getString("email"));
+        f.setAddress(rs.getString("address"));
+        f.setNic(rs.getString("nic"));
+        return f;
+    };
+
+    @Override
+    public int insert(Farmer farmer) {
+        String sql = "insert into farmers (name, phone, email, address, nic) VALUES (?, ?, ?, ?, ?)";
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> {
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, farmer.Name());
+            ps.setString(2, farmer.getPhone());
+            ps.setString(3, farmer.getEmail());
+            ps.setString(4, farmer.getAddress());
+            ps.setString(5, farmer.getNic());
+            return ps;
+        }, keyHolder);
+        Number key = keyHolder.getKey();
+        return key != null ? key.intValue() : 0;
+    }
+
+    @Override
+    public List<Farmer> findAll() {
+        String sql = "SELECT * FROM farmers";
+        return jdbcTemplate.query(sql, MAPPER);
+    }
+
+    @Override
+    public Optional<Farmer> findById(int id) {
+        String sql = "SELECT * FROM farmers WHERE farmer_id = ?";
+        return jdbcTemplate.query(sql, MAPPER, id).stream().findFirst();
+    }
+
+    @Override
+    public int update(Farmer farmer) {
+        String sql = "UPDATE farmer SET full_name=?, phone=?, email=?, address=?, nic=? WHERE farmer_id=?";
+        return jdbcTemplate.update(sql,
+                farmer.Name(),
+                farmer.getPhone(),
+                farmer.getEmail(),
+                farmer.getAddress(),
+                farmer.getNic(),
+                farmer.getFarmerId());
+    }
+
+    @Override
+    public int delete(int id) {
+        String sql = "DELETE FROM farmers WHERE farmer_id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
 }
