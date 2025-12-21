@@ -26,7 +26,6 @@ public class FarmerDaoImpl implements FarmerDao {
         f.setFarmerId(rs.getInt("farmer_id"));
         f.setFullName(rs.getString("name"));
         f.setPhone(rs.getString("phone"));
-        f.setEmail(rs.getString("email"));
         f.setAddress(rs.getString("address"));
         f.setNic(rs.getString("nic"));
         return f;
@@ -40,7 +39,6 @@ public class FarmerDaoImpl implements FarmerDao {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, farmer.getFullName());
             ps.setString(2, farmer.getPhone());
-            ps.setString(3, farmer.getEmail());
             ps.setString(4, farmer.getAddress());
             ps.setString(5, farmer.getNic());
             return ps;
@@ -67,7 +65,6 @@ public class FarmerDaoImpl implements FarmerDao {
         return jdbcTemplate.update(sql,
                 farmer.getFullName(),
                 farmer.getPhone(),
-                farmer.getEmail(),
                 farmer.getAddress(),
                 farmer.getNic(),
                 farmer.getFarmerId());

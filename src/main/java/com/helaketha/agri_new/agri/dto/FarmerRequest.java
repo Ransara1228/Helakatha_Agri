@@ -46,13 +46,6 @@ public class FarmerRequest {
         this.phone = phone;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getAddress() {
         return address;
@@ -74,7 +67,6 @@ public class FarmerRequest {
         Farmer farmer = new Farmer();
         farmer.setFullName(fullName);
         farmer.setPhone(phone);
-        farmer.setEmail(email);
         farmer.setAddress(address);
         farmer.setNic(nic);
         return farmer;

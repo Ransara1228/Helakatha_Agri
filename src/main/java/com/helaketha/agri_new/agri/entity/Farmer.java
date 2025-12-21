@@ -5,17 +5,15 @@ public class Farmer {
     private Integer farmerId;
     private String fullName;
     private String phone;
-    private String email;
     private String address;
     private String nic;
 
     public Farmer() { }
 
-    public Farmer(Integer farmerId, String fullName, String phone, String email, String address, String nic) {
+    public Farmer(Integer farmerId, String fullName, String phone, String address, String nic) {
         this.farmerId = farmerId;
         this.fullName = fullName;
         this.phone = phone;
-        this.email = email;
         this.address = address;
         this.nic = nic;
     }
@@ -44,13 +42,6 @@ public class Farmer {
         this.phone = phone;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public String getAddress() {
         return address;

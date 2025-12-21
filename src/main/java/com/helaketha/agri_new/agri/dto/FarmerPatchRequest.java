@@ -68,9 +68,7 @@ public class FarmerPatchRequest {
         }
         if (phone != null) {
             farmer.setPhone(phone);
-        }
-        if (email != null) {
-            farmer.setEmail(email);
+
         }
         if (address != null) {
             farmer.setAddress(address);
