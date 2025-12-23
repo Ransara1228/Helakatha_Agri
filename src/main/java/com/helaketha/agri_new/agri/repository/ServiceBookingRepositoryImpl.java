@@ -1,11 +1,4 @@
-package com.helaketha.agri_new.agri.dao;
-
-import com.helaketha.agri_new.agri.entity.ServiceBooking;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
+package com.helaketha.agri_new.agri.repository;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -14,12 +7,20 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
+import com.helaketha.agri_new.agri.entity.ServiceBooking;
+
 @Repository
-public class ServiceBookingDaoImpl implements ServiceBookingDao {
+public class ServiceBookingRepositoryImpl implements ServiceBookingRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public ServiceBookingDaoImpl(JdbcTemplate jdbcTemplate) {
+    public ServiceBookingRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 

@@ -1,6 +1,6 @@
 package com.helaketha.agri_new.agri.service;
 
-import com.helaketha.agri_new.agri.dao.FarmerDao;
+import com.helaketha.agri_new.agri.repository.FarmerRepository;
 import com.helaketha.agri_new.agri.entity.Farmer;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import java.util.Optional;
 @Service
 public class FarmerService {
 
-    private final FarmerDao dao;
+    private final FarmerRepository dao;
 
-    public FarmerService(FarmerDao dao) {
+    public FarmerService(FarmerRepository dao) {
         this.dao = dao;
     }
 

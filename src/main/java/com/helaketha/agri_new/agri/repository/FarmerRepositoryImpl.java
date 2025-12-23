@@ -1,4 +1,4 @@
-package com.helaketha.agri_new.agri.dao;
+package com.helaketha.agri_new.agri.repository;
 
 import com.helaketha.agri_new.agri.entity.Farmer;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class FarmerDaoImpl implements FarmerDao {
+public class FarmerRepositoryImpl implements FarmerRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public FarmerDaoImpl(JdbcTemplate jdbcTemplate) {
+    public FarmerRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -26,6 +26,7 @@ public class FarmerDaoImpl implements FarmerDao {
         f.setFarmerId(rs.getInt("farmer_id"));
         f.setFullName(rs.getString("name"));
         f.setPhone(rs.getString("phone"));
+        f.setEmail(rs.getString("email"));
         f.setAddress(rs.getString("address"));
         f.setNic(rs.getString("nic"));
         return f;
@@ -39,12 +40,25 @@ public class FarmerDaoImpl implements FarmerDao {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, farmer.getFullName());
             ps.setString(2, farmer.getPhone());
+            ps.setString(3, farmer.getEmail());
             ps.setString(4, farmer.getAddress());
             ps.setString(5, farmer.getNic());
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
         return key != null ? key.intValue() : 0;
+    }
+
+    @Override
+    public int update(Farmer farmer) {
+        String sql = "UPDATE farmers SET name=?, phone=?, email=?, address=?, nic=? WHERE farmer_id=?";
+        return jdbcTemplate.update(sql,
+                farmer.getFullName(),
+                farmer.getPhone(),
+                farmer.getEmail(),
+                farmer.getAddress(),
+                farmer.getNic(),
+                farmer.getFarmerId());
     }
 
     @Override
@@ -57,17 +71,6 @@ public class FarmerDaoImpl implements FarmerDao {
     public Optional<Farmer> findById(int id) {
         String sql = "SELECT * FROM farmers WHERE farmer_id = ?";
         return jdbcTemplate.query(sql, MAPPER, id).stream().findFirst();
-    }
-
-    @Override
-    public int update(Farmer farmer) {
-        String sql = "UPDATE farmer SET full_name=?, phone=?, email=?, address=?, nic=? WHERE farmer_id=?";
-        return jdbcTemplate.update(sql,
-                farmer.getFullName(),
-                farmer.getPhone(),
-                farmer.getAddress(),
-                farmer.getNic(),
-                farmer.getFarmerId());
     }
 
     @Override
