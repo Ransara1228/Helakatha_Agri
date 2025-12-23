@@ -23,7 +23,7 @@ logging:
     org.springframework.jdbc: DEBUG
 
 server:
-  port: 10187
+  port: 10188
 
 cors:
   allowed-origins: "http://localhost:4200"
