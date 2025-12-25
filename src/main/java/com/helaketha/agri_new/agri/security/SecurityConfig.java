@@ -47,8 +47,12 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // PUBLIC ENDPOINTS
+                        // PUBLIC ENDPOINTS (for development - remove in production)
                         .requestMatchers("/api/farmers/**").permitAll()
+                        .requestMatchers("/api/harvester-drivers/**").permitAll()
+                        .requestMatchers("/api/tractor-drivers/**").permitAll()
+                        .requestMatchers("/api/fertilizer-suppliers/**").permitAll()
+                        .requestMatchers("/api/services/**").permitAll()
 
                         // SECURED ENDPOINTS
                         .requestMatchers("/api/**").authenticated()

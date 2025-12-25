@@ -45,6 +45,20 @@ public class HarvesterDriverController {
         return ResponseEntity.ok(updated);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<HarvesterDriver> patch(@PathVariable int id, @Valid @RequestBody HarvesterDriver driver) {
+        return service.findById(id).map(existing -> {
+            if (driver.getName() != null) {
+                existing.setName(driver.getName());
+            }
+            if (driver.getPhone() != null) {
+                existing.setPhone(driver.getPhone());
+            }
+            HarvesterDriver updated = service.update(id, existing);
+            return ResponseEntity.ok(updated);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         boolean deleted = service.delete(id);

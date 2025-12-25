@@ -45,6 +45,23 @@ public class FertilizerSupplierController {
         return ResponseEntity.ok(updated);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<FertilizerSupplier> patch(@PathVariable int id, @Valid @RequestBody FertilizerSupplier supplier) {
+        return service.findById(id).map(existing -> {
+            if (supplier.getName() != null) {
+                existing.setName(supplier.getName());
+            }
+            if (supplier.getPhone() != null) {
+                existing.setPhone(supplier.getPhone());
+            }
+            if (supplier.getFertilizerType() != null) {
+                existing.setFertilizerType(supplier.getFertilizerType());
+            }
+            FertilizerSupplier updated = service.update(id, existing);
+            return ResponseEntity.ok(updated);
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         boolean deleted = service.delete(id);
