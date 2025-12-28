@@ -29,12 +29,14 @@ public class FarmerRepositoryImpl implements FarmerRepository {
         f.setEmail(rs.getString("email"));
         f.setAddress(rs.getString("address"));
         f.setNic(rs.getString("nic"));
+        f.setUsername(rs.getString("username"));
+        f.setPassword(rs.getString("password"));
         return f;
     };
 
     @Override
     public int insert(Farmer farmer) {
-        String sql = "insert into farmers (name, phone, email, address, nic) VALUES (?, ?, ?, ?, ?)";
+        String sql = "insert into farmers (name, phone, email, address, nic, username, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -43,6 +45,8 @@ public class FarmerRepositoryImpl implements FarmerRepository {
             ps.setString(3, farmer.getEmail());
             ps.setString(4, farmer.getAddress());
             ps.setString(5, farmer.getNic());
+            ps.setString(6, farmer.getUsername());
+            ps.setString(7, farmer.getPassword());
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -51,13 +55,15 @@ public class FarmerRepositoryImpl implements FarmerRepository {
 
     @Override
     public int update(Farmer farmer) {
-        String sql = "UPDATE farmers SET name=?, phone=?, email=?, address=?, nic=? WHERE farmer_id=?";
+        String sql = "UPDATE farmers SET name=?, phone=?, email=?, address=?, nic=?, username=?, password=? WHERE farmer_id=?";
         return jdbcTemplate.update(sql,
                 farmer.getFullName(),
                 farmer.getPhone(),
                 farmer.getEmail(),
                 farmer.getAddress(),
                 farmer.getNic(),
+                farmer.getUsername(),
+                farmer.getPassword(),
                 farmer.getFarmerId());
     }
 

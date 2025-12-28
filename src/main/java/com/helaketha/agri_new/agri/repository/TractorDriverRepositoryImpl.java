@@ -28,17 +28,26 @@ public class TractorDriverRepositoryImpl implements TractorDriverRepository {
         d.setTractorDriverId(rs.getInt("tractor_driver_id"));
         d.setName(rs.getString("name"));
         d.setPhone(rs.getString("phone"));
+        Integer machineQty = rs.getObject("machine_quantity", Integer.class);
+        d.setMachineQuantity(machineQty);
+        d.setPricePerAcre(rs.getBigDecimal("price_per_acre"));
+        d.setUsername(rs.getString("username"));
+        d.setPassword(rs.getString("password"));
         return d;
     };
 
     @Override
     public int insert(TractorDriver d) {
-        String sql = "INSERT INTO tractor_drivers (name, phone) VALUES (?, ?)";
+        String sql = "INSERT INTO tractor_drivers (name, phone, machine_quantity, price_per_acre, username, password) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, d.getName());
             ps.setString(2, d.getPhone());
+            ps.setObject(3, d.getMachineQuantity());
+            ps.setObject(4, d.getPricePerAcre());
+            ps.setString(5, d.getUsername());
+            ps.setString(6, d.getPassword());
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -48,7 +57,7 @@ public class TractorDriverRepositoryImpl implements TractorDriverRepository {
     @Override
     public List<TractorDriver> findAll() {
         return jdbcTemplate.query(
-                "SELECT tractor_driver_id, name, phone FROM tractor_drivers",
+                "SELECT tractor_driver_id, name, phone, machine_quantity, price_per_acre, username, password FROM tractor_drivers",
                 MAPPER
         );
     }
@@ -56,7 +65,7 @@ public class TractorDriverRepositoryImpl implements TractorDriverRepository {
     @Override
     public Optional<TractorDriver> findById(int id) {
         return jdbcTemplate.query(
-                "SELECT tractor_driver_id, name, phone FROM tractor_drivers WHERE tractor_driver_id = ?",
+                "SELECT tractor_driver_id, name, phone, machine_quantity, price_per_acre, username, password FROM tractor_drivers WHERE tractor_driver_id = ?",
                 MAPPER,
                 id
         ).stream().findFirst();
@@ -65,8 +74,8 @@ public class TractorDriverRepositoryImpl implements TractorDriverRepository {
     @Override
     public int update(TractorDriver d) {
         return jdbcTemplate.update(
-                "UPDATE tractor_drivers SET name = ?, phone = ? WHERE tractor_driver_id = ?",
-                d.getName(), d.getPhone(), d.getTractorDriverId()
+                "UPDATE tractor_drivers SET name = ?, phone = ?, machine_quantity = ?, price_per_acre = ?, username = ?, password = ? WHERE tractor_driver_id = ?",
+                d.getName(), d.getPhone(), d.getMachineQuantity(), d.getPricePerAcre(), d.getUsername(), d.getPassword(), d.getTractorDriverId()
         );
     }
 

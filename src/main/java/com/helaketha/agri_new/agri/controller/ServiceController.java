@@ -76,14 +76,20 @@ public class ServiceController {
             if (request.getFarmerId() != null) {
                 existing.setFarmerId(request.getFarmerId());
             }
-            if (request.getServiceId() != null) {
-                existing.setServiceId(request.getServiceId());
-            }
             if (request.getServiceType() != null) {
                 existing.setServiceType(request.getServiceType());
             }
+            if (request.getProviderId() != null) {
+                existing.setProviderId(request.getProviderId());
+            }
             if (request.getBookingDate() != null) {
                 existing.setBookingDate(request.getBookingDate());
+            }
+            if (request.getBookingTime() != null) {
+                existing.setBookingTime(request.getBookingTime());
+            }
+            if (request.getTotalCost() != null) {
+                existing.setTotalCost(request.getTotalCost());
             }
             if (request.getStatus() != null) {
                 existing.setStatus(request.getStatus());

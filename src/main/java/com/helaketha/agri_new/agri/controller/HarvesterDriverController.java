@@ -54,6 +54,18 @@ public class HarvesterDriverController {
             if (driver.getPhone() != null) {
                 existing.setPhone(driver.getPhone());
             }
+            if (driver.getAvailableMachines() != null) {
+                existing.setAvailableMachines(driver.getAvailableMachines());
+            }
+            if (driver.getPricePerAcre() != null) {
+                existing.setPricePerAcre(driver.getPricePerAcre());
+            }
+            if (driver.getUsername() != null) {
+                existing.setUsername(driver.getUsername());
+            }
+            if (driver.getPassword() != null) {
+                existing.setPassword(driver.getPassword());
+            }
             HarvesterDriver updated = service.update(id, existing);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());

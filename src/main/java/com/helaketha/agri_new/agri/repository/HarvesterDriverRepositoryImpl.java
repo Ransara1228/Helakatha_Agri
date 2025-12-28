@@ -28,17 +28,26 @@ public class HarvesterDriverRepositoryImpl implements HarvesterDriverRepository 
         d.setHarvesterDriverId(rs.getInt("harvester_driver_id"));
         d.setName(rs.getString("name"));
         d.setPhone(rs.getString("phone"));
+        Integer availableMachines = rs.getObject("available_machines", Integer.class);
+        d.setAvailableMachines(availableMachines);
+        d.setPricePerAcre(rs.getBigDecimal("price_per_acre"));
+        d.setUsername(rs.getString("username"));
+        d.setPassword(rs.getString("password"));
         return d;
     };
 
     @Override
     public int insert(HarvesterDriver d) {
-        String sql = "INSERT INTO harvester_drivers (name, phone) VALUES (?, ?)";
+        String sql = "INSERT INTO harvester_drivers (name, phone, available_machines, price_per_acre, username, password) VALUES (?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, d.getName());
             ps.setString(2, d.getPhone());
+            ps.setObject(3, d.getAvailableMachines());
+            ps.setObject(4, d.getPricePerAcre());
+            ps.setString(5, d.getUsername());
+            ps.setString(6, d.getPassword());
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -48,7 +57,7 @@ public class HarvesterDriverRepositoryImpl implements HarvesterDriverRepository 
     @Override
     public List<HarvesterDriver> findAll() {
         return jdbcTemplate.query(
-                "SELECT harvester_driver_id, name, phone FROM harvester_drivers",
+                "SELECT harvester_driver_id, name, phone, available_machines, price_per_acre, username, password FROM harvester_drivers",
                 MAPPER
         );
     }
@@ -56,7 +65,7 @@ public class HarvesterDriverRepositoryImpl implements HarvesterDriverRepository 
     @Override
     public Optional<HarvesterDriver> findById(int id) {
         return jdbcTemplate.query(
-                "SELECT harvester_driver_id, name, phone FROM harvester_drivers WHERE harvester_driver_id = ?",
+                "SELECT harvester_driver_id, name, phone, available_machines, price_per_acre, username, password FROM harvester_drivers WHERE harvester_driver_id = ?",
                 MAPPER,
                 id
         ).stream().findFirst();
@@ -65,8 +74,8 @@ public class HarvesterDriverRepositoryImpl implements HarvesterDriverRepository 
     @Override
     public int update(HarvesterDriver d) {
         return jdbcTemplate.update(
-                "UPDATE harvester_drivers SET name = ?, phone = ? WHERE harvester_driver_id = ?",
-                d.getName(), d.getPhone(), d.getHarvesterDriverId()
+                "UPDATE harvester_drivers SET name = ?, phone = ?, available_machines = ?, price_per_acre = ?, username = ?, password = ? WHERE harvester_driver_id = ?",
+                d.getName(), d.getPhone(), d.getAvailableMachines(), d.getPricePerAcre(), d.getUsername(), d.getPassword(), d.getHarvesterDriverId()
         );
     }
 

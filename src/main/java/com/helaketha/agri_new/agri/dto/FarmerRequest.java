@@ -1,6 +1,5 @@
 package com.helaketha.agri_new.agri.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.helaketha.agri_new.agri.entity.Farmer;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +8,6 @@ import jakarta.validation.constraints.Size;
 
 public class FarmerRequest {
 
-    @JsonProperty("full_name")
     @NotBlank
     @Size(max = 100)
     private String fullName;
@@ -29,6 +27,14 @@ public class FarmerRequest {
     @NotBlank
     @Pattern(regexp = "^(?:\\d{9}[vVxX]|\\d{12})$")
     private String nic;
+
+    @NotBlank
+    @Size(max = 50)
+    private String username;
+
+    @NotBlank
+    @Size(min = 6, max = 255)
+    private String password;
 
     public String getFullName() {
         return fullName;
@@ -71,6 +77,22 @@ public class FarmerRequest {
         this.nic = nic;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Farmer toEntity() {
         Farmer farmer = new Farmer();
         farmer.setFullName(fullName);
@@ -78,6 +100,8 @@ public class FarmerRequest {
         farmer.setEmail(email);
         farmer.setAddress(address);
         farmer.setNic(nic);
+        farmer.setUsername(username);
+        farmer.setPassword(password);
         return farmer;
     }
 }

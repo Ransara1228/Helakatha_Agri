@@ -3,7 +3,9 @@ package com.helaketha.agri_new.agri.repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,25 +30,31 @@ public class ServiceBookingRepositoryImpl implements ServiceBookingRepository {
         ServiceBooking b = new ServiceBooking();
         b.setBookingId(rs.getInt("booking_id"));
         b.setFarmerId(rs.getInt("farmer_id"));
-        b.setServiceId(rs.getInt("service_id"));
         b.setServiceType(rs.getString("service_type"));
+        Integer providerId = rs.getObject("provider_id", Integer.class);
+        b.setProviderId(providerId);
         Date d = rs.getDate("booking_date");
         if (d != null) { b.setBookingDate(d.toLocalDate()); }
+        java.sql.Time t = rs.getTime("booking_time");
+        if (t != null) { b.setBookingTime(t.toLocalTime()); }
+        b.setTotalCost(rs.getBigDecimal("total_cost"));
         b.setStatus(rs.getString("status"));
         return b;
     };
 
     @Override
     public int insert(ServiceBooking booking) {
-        String sql = "INSERT INTO service_booking (farmer_id, service_id, service_type, booking_date, status) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO service_booking (farmer_id, service_type, provider_id, booking_date, booking_time, total_cost, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setObject(1, booking.getFarmerId());
-            ps.setObject(2, booking.getServiceId());
-            ps.setString(3, booking.getServiceType());
+            ps.setString(2, booking.getServiceType());
+            ps.setObject(3, booking.getProviderId());
             ps.setObject(4, booking.getBookingDate() != null ? Date.valueOf(booking.getBookingDate()) : null);
-            ps.setString(5, booking.getStatus());
+            ps.setObject(5, booking.getBookingTime() != null ? Time.valueOf(booking.getBookingTime()) : null);
+            ps.setObject(6, booking.getTotalCost());
+            ps.setString(7, booking.getStatus() != null ? booking.getStatus() : "Pending");
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -85,13 +93,15 @@ public class ServiceBookingRepositoryImpl implements ServiceBookingRepository {
 
     @Override
     public int update(ServiceBooking booking) {
-        String sql = "UPDATE service_booking SET farmer_id=?, service_id=?, service_type=?, booking_date=?, status=? WHERE booking_id=?";
+        String sql = "UPDATE service_booking SET farmer_id=?, service_type=?, provider_id=?, booking_date=?, booking_time=?, total_cost=?, status=? WHERE booking_id=?";
         return jdbcTemplate.update(sql,
                 booking.getFarmerId(),
-                booking.getServiceId(),
                 booking.getServiceType(),
+                booking.getProviderId(),
                 booking.getBookingDate() != null ? Date.valueOf(booking.getBookingDate()) : null,
-                booking.getStatus(),
+                booking.getBookingTime() != null ? Time.valueOf(booking.getBookingTime()) : null,
+                booking.getTotalCost(),
+                booking.getStatus() != null ? booking.getStatus() : "Pending",
                 booking.getBookingId());
     }
 

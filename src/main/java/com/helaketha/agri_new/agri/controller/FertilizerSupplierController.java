@@ -57,6 +57,18 @@ public class FertilizerSupplierController {
             if (supplier.getFertilizerType() != null) {
                 existing.setFertilizerType(supplier.getFertilizerType());
             }
+            if (supplier.getStockQuantityLiters() != null) {
+                existing.setStockQuantityLiters(supplier.getStockQuantityLiters());
+            }
+            if (supplier.getPricePerLiter() != null) {
+                existing.setPricePerLiter(supplier.getPricePerLiter());
+            }
+            if (supplier.getUsername() != null) {
+                existing.setUsername(supplier.getUsername());
+            }
+            if (supplier.getPassword() != null) {
+                existing.setPassword(supplier.getPassword());
+            }
             FertilizerSupplier updated = service.update(id, existing);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());

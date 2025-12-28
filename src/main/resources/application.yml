@@ -1,0 +1,26 @@
+spring:
+  # OAuth2 Resource Server Configuration (Keycloak)
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:10188/realms/agri-realm
+          jwk-set-uri: http://localhost:10188/realms/agri-realm/protocol/openid-connect/certs
+  datasource:
+    # H2 Database (for development - in-memory)
+    url: jdbc:h2:mem:helaketha_agri_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: root
+    password: root
+    driver-class-name: org.h2.Driver
+    
+
+    
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      
+  h2:
+    console:
+      enabled: true
+      path: /h2-console

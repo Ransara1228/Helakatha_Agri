@@ -22,6 +22,12 @@ public class FarmerPatchRequest {
     @Pattern(regexp = "^(?:\\d{9}[vVxX]|\\d{12})$")
     private String nic;
 
+    @Size(max = 50)
+    private String username;
+
+    @Size(min = 6, max = 255)
+    private String password;
+
     public String getFullName() {
         return fullName;
     }
@@ -62,6 +68,22 @@ public class FarmerPatchRequest {
         this.nic = nic;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public void applyTo(Farmer farmer) {
         if (fullName != null) {
             farmer.setFullName(fullName);
@@ -77,6 +99,12 @@ public class FarmerPatchRequest {
         }
         if (nic != null) {
             farmer.setNic(nic);
+        }
+        if (username != null) {
+            farmer.setUsername(username);
+        }
+        if (password != null) {
+            farmer.setPassword(password);
         }
     }
 }
