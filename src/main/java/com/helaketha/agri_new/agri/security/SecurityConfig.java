@@ -20,6 +20,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -48,11 +50,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
                         // PUBLIC ENDPOINTS (for development - remove in production)
-                        .requestMatchers("/api/farmers/**").permitAll()
-                        .requestMatchers("/api/harvester-drivers/**").permitAll()
-                        .requestMatchers("/api/tractor-drivers/**").permitAll()
-                        .requestMatchers("/api/fertilizer-suppliers/**").permitAll()
-                        .requestMatchers("/api/services/**").permitAll()
+                        .requestMatchers("/api/farmers/**").authenticated()
+                        .requestMatchers("/api/harvester-drivers/**").authenticated()
+                        .requestMatchers("/api/tractor-drivers/**").authenticated()
+                        .requestMatchers("/api/fertilizer-suppliers/**").authenticated()
+                        .requestMatchers("/api/services/**").authenticated()
 
                         // SECURED ENDPOINTS
                         .requestMatchers("/api/**").authenticated()
@@ -62,24 +64,19 @@ public class SecurityConfig {
                 )
 
                 // OAuth2 Resource Server (JWT)
-                .oauth2ResourceServer(oauth2 ->
-                        oauth2.jwt(jwt ->
-                                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)
-                        )
-                );
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
 
         return http.build();
     }
 
     /**
      * JWT Decoder (Keycloak)
-     * Replace realm name if needed
+     * Configured for helakatha-agri-realm
      */
     @Bean
     public JwtDecoder jwtDecoder() {
         return NimbusJwtDecoder.withJwkSetUri(
-                "http://localhost:10188/realms/agri-realm/protocol/openid-connect/certs"
-
+                "http://localhost:8090/realms/helakatha-agri-realm/protocol/openid-connect/certs"
         ).build();
     }
 

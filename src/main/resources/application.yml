@@ -2,22 +2,19 @@ spring:
   # OAuth2 Resource Server Configuration (Keycloak)
   security:
     oauth2:
-      resourceserver:
+      resource-server:
         jwt:
-          issuer-uri: http://localhost:10188/realms/agri-realm
-          jwk-set-uri: http://localhost:10188/realms/agri-realm/protocol/openid-connect/certs
-  datasource:
-    # H2 Database (for development - in-memory)
-    url: jdbc:h2:mem:helaketha_agri_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+
+          jwk-set-uri: http://localhost:8090/realms/helakatha-agri-realm/protocol/openid-connect/certs
+    # H2 Database (file-based for data persistence)
+    url: jdbc:h2:file:./data/helaketha_agri_db;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
     username: root
     password: root
     driver-class-name: org.h2.Driver
     
-
-    
   sql:
     init:
-      mode: always
+      mode: always  # Safe to use 'always' because schema.sql uses 'CREATE TABLE IF NOT EXISTS'
       schema-locations: classpath:schema.sql
       
   h2:

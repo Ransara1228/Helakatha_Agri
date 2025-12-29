@@ -3,11 +3,13 @@ package com.helaketha.agri_new.agri.service;
 import com.helaketha.agri_new.agri.repository.FarmerRepository;
 import com.helaketha.agri_new.agri.entity.Farmer;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class FarmerService {
 
     private final FarmerRepository dao;
