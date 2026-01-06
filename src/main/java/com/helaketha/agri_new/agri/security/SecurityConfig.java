@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -20,8 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -34,7 +33,7 @@ public class SecurityConfig {
 
         http
                 // Disable CSRF (REST API)
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
 
                 // Enable CORS
                 .cors(cors -> {})
@@ -49,12 +48,13 @@ public class SecurityConfig {
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // PUBLIC ENDPOINTS (for development - remove in production)
-                        .requestMatchers("/api/farmers/**").authenticated()
-                        .requestMatchers("/api/harvester-drivers/**").authenticated()
-                        .requestMatchers("/api/tractor-drivers/**").authenticated()
-                        .requestMatchers("/api/fertilizer-suppliers/**").authenticated()
-                        .requestMatchers("/api/services/**").authenticated()
+                        // SECURED ENDPOINTS - Require OAuth2 authentication
+                        .requestMatchers("/api/farmers/**").permitAll()
+                        .requestMatchers("/api/harvester-drivers/**").permitAll()
+                        .requestMatchers("/api/tractor-drivers/**").permitAll()
+                        .requestMatchers("/api/fertilizer-suppliers/**").permitAll()
+                        .requestMatchers("/api/services/**").permitAll()
+                        .requestMatchers("/api/provider-schedules/**").permitAll()
 
                         // SECURED ENDPOINTS
                         .requestMatchers("/api/**").authenticated()
@@ -63,8 +63,12 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
 
-                // OAuth2 Resource Server (JWT)
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
+                // OAuth2 Resource Server (JWT) - Keycloak
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwt ->
+                                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)
+                        )
+                );
 
         return http.build();
     }

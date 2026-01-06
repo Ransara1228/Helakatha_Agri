@@ -4,20 +4,17 @@ spring:
     oauth2:
       resource-server:
         jwt:
-
+          issuer-uri: http://localhost:8090/realms/helakatha-agri-realm
           jwk-set-uri: http://localhost:8090/realms/helakatha-agri-realm/protocol/openid-connect/certs
-    # H2 Database (file-based for data persistence)
-    url: jdbc:h2:file:./data/helaketha_agri_db;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+
+  # MySQL Database Configuration
+  datasource:
+    url: jdbc:mysql://localhost:3306/helaketha_agri_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
     password: root
-    driver-class-name: org.h2.Driver
-    
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
   sql:
     init:
       mode: always  # Safe to use 'always' because schema.sql uses 'CREATE TABLE IF NOT EXISTS'
       schema-locations: classpath:schema.sql
-      
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
