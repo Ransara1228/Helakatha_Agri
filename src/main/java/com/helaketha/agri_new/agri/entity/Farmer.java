@@ -9,7 +9,7 @@ public class Farmer {
     private String address;
     private String nic;
     private String username;
-    private String password;
+
 
     public Farmer() { }
 
@@ -75,13 +75,4 @@ public class Farmer {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-}
+    }}

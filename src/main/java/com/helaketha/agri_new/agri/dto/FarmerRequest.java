@@ -101,7 +101,6 @@ public class FarmerRequest {
         farmer.setAddress(address);
         farmer.setNic(nic);
         farmer.setUsername(username);
-        farmer.setPassword(password);
         return farmer;
     }
 }

@@ -30,7 +30,7 @@ public class FarmerRepositoryImpl implements FarmerRepository {
         f.setAddress(rs.getString("address"));
         f.setNic(rs.getString("nic"));
         f.setUsername(rs.getString("username"));
-        f.setPassword(rs.getString("password"));
+
         return f;
     };
 
@@ -46,7 +46,7 @@ public class FarmerRepositoryImpl implements FarmerRepository {
             ps.setString(4, farmer.getAddress());
             ps.setString(5, farmer.getNic());
             ps.setString(6, farmer.getUsername());
-            ps.setString(7, farmer.getPassword());
+
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -63,7 +63,7 @@ public class FarmerRepositoryImpl implements FarmerRepository {
                 farmer.getAddress(),
                 farmer.getNic(),
                 farmer.getUsername(),
-                farmer.getPassword(),
+
                 farmer.getFarmerId());
     }
 

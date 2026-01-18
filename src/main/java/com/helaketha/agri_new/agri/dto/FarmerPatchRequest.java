@@ -25,8 +25,7 @@ public class FarmerPatchRequest {
     @Size(max = 50)
     private String username;
 
-    @Size(min = 6, max = 255)
-    private String password;
+
 
     public String getFullName() {
         return fullName;
@@ -76,13 +75,6 @@ public class FarmerPatchRequest {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public void applyTo(Farmer farmer) {
         if (fullName != null) {
@@ -102,9 +94,7 @@ public class FarmerPatchRequest {
         }
         if (username != null) {
             farmer.setUsername(username);
-        }
-        if (password != null) {
-            farmer.setPassword(password);
+
         }
     }
 }

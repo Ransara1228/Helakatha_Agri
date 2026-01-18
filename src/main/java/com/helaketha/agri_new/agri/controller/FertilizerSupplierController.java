@@ -66,9 +66,7 @@ public class FertilizerSupplierController {
             if (supplier.getUsername() != null) {
                 existing.setUsername(supplier.getUsername());
             }
-            if (supplier.getPassword() != null) {
-                existing.setPassword(supplier.getPassword());
-            }
+            // Password is managed by Keycloak, not stored in database
             FertilizerSupplier updated = service.update(id, existing);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());

@@ -10,8 +10,12 @@ public class TractorDriver {
     private Integer machineQuantity;
     private BigDecimal pricePerAcre;
     private String username;
-    private String password;
+    private String password; // Added this field
 
+    // Default Constructor
+    public TractorDriver() {}
+
+    // Getters and Setters
     public Integer getTractorDriverId() {
         return tractorDriverId;
     }

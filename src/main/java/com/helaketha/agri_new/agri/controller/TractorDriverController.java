@@ -63,9 +63,7 @@ public class TractorDriverController {
             if (driver.getUsername() != null) {
                 existing.setUsername(driver.getUsername());
             }
-            if (driver.getPassword() != null) {
-                existing.setPassword(driver.getPassword());
-            }
+            // Password is managed by Keycloak, not stored in database
             TractorDriver updated = service.update(id, existing);
             return ResponseEntity.ok(updated);
         }).orElse(ResponseEntity.notFound().build());
