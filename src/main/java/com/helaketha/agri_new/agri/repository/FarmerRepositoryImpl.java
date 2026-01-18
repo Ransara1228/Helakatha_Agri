@@ -30,13 +30,18 @@ public class FarmerRepositoryImpl implements FarmerRepository {
         f.setAddress(rs.getString("address"));
         f.setNic(rs.getString("nic"));
         f.setUsername(rs.getString("username"));
-
+        try {
+            f.setKeycloakUserId(rs.getString("keycloak_user_id"));
+        } catch (Exception e) {
+            // keycloak_user_id column may not exist yet
+            f.setKeycloakUserId(null);
+        }
         return f;
     };
 
     @Override
     public int insert(Farmer farmer) {
-        String sql = "insert into farmers (name, phone, email, address, nic, username, password) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO farmers (name, phone, email, address, nic, username, keycloak_user_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -46,7 +51,7 @@ public class FarmerRepositoryImpl implements FarmerRepository {
             ps.setString(4, farmer.getAddress());
             ps.setString(5, farmer.getNic());
             ps.setString(6, farmer.getUsername());
-
+            ps.setString(7, farmer.getKeycloakUserId());
             return ps;
         }, keyHolder);
         Number key = keyHolder.getKey();
@@ -55,7 +60,7 @@ public class FarmerRepositoryImpl implements FarmerRepository {
 
     @Override
     public int update(Farmer farmer) {
-        String sql = "UPDATE farmers SET name=?, phone=?, email=?, address=?, nic=?, username=?, password=? WHERE farmer_id=?";
+        String sql = "UPDATE farmers SET name=?, phone=?, email=?, address=?, nic=?, username=?, keycloak_user_id=? WHERE farmer_id=?";
         return jdbcTemplate.update(sql,
                 farmer.getFullName(),
                 farmer.getPhone(),
@@ -63,7 +68,7 @@ public class FarmerRepositoryImpl implements FarmerRepository {
                 farmer.getAddress(),
                 farmer.getNic(),
                 farmer.getUsername(),
-
+                farmer.getKeycloakUserId(),
                 farmer.getFarmerId());
     }
 

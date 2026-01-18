@@ -18,3 +18,10 @@ spring:
     init:
       mode: always  # Safe to use 'always' because schema.sql uses 'CREATE TABLE IF NOT EXISTS'
       schema-locations: classpath:schema.sql
+
+# Keycloak Admin Client Configuration
+keycloak:
+  server-url: http://localhost:8090
+  realm: helakatha-agri-realm
+  admin-client-id: helaketha-agri-admin
+  admin-client-secret: admin-client-secret-change-me  # CHANGE THIS after getting the actual secret from Keycloak

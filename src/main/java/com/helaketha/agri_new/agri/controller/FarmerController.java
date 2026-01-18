@@ -25,7 +25,9 @@ public class FarmerController {
 
     @PostMapping
     public ResponseEntity<Farmer> addFarmer(@Valid @RequestBody FarmerRequest request) {
-        Farmer created = service.create(request.toEntity());
+        Farmer farmer = request.toEntity();
+        // Create farmer: Keycloak user is created first, then saved to database
+        Farmer created = service.create(farmer, request.getPassword());
         return ResponseEntity.status(201).body(created);
     }
 
